@@ -13,71 +13,62 @@
 [actions-on-google](https://github.com/actions-on-google/actions-on-google-nodejs)と[firebase-functions](https://github.com/firebase/firebase-functions)が必要となるので2つをインポート。  
 ActionsSdkAppのリファレンスは[コチラ](https://developers.google.com/actions/reference/nodejs/ActionsSdkApp)
 ```
-const ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 const functions = require('firebase-functions');
+const app = require('actions-on-google').actionssdk();
 ```
 
 Actions on Googleアプリ、echoアプリのエンドポイントとなるexport関数を定義。
 ```
-exports.echo = functions.https.onRequest((request, response) => {
-});
+exports.echo = functions.https.onRequest(app);
 ```
 
 処理を振り分ける目安となるintent2つの為のactionMapを設定。  
 ひとまず、`actions.intent.MAIN`は、起動時。`actions.intent.TEXT`はそれ以外と受け止めてください。
 ```
-exports.echo = functions.https.onRequest((request, response) => {
-  const app = new ActionsSdkApp({ request, response });
-  const actionMap = new Map();
-  actionMap.set('actions.intent.MAIN', mainIntent); // mainIntentは処理用関数
-  actionMap.set('actions.intent.TEXT', rawInput); // rawInputは処理用関数
-  app.handleRequest(actionMap);
-});
+app.intent('actions.intent.MAIN', mainIntent); // 追加
+app.intent('actions.intent.TEXT', subIntent); // 追加
+exports.echo = functions.https.onRequest(app);
 ```
 
 起動時にechoアプリに喋らせたい内容を記述。
 ```
-const mainIntent = app => {
-  app.ask(/* 喋らせたい内容 */); // ask関数は会話を続けたい場合に使用
+const mainIntent = conv => {
+  conv.ask(/* 喋らせたい内容 */); // ask関数は会話を続けたい場合に使用
 };
 ```
 
 起動後のユーザーの発話を処理する内容を記述。
 ```
-const rawInput = app => {
-  const rawInput = app.getRawInput(); // getRawInput関数はユーザーの発言内容をテキスト化したものを取得
+// 第二引数はユーザーの発言内容をテキスト化したものを取得
+const subIntent = (conv, rawInput) => {
   if (/* アプリ終了用の条件式 */) {
-    app.tell(/* 終了時に喋らせたい内容 */);
+    conv.close(/* 終了時に喋らせたい内容 */);
   } else {
-    app.ask(/* エコーされたとわかるような内容 */);
+    conv.ask(/* エコーされたとわかるような内容 */);
   }
 };
 ```
 
 完成コードの例
 ```
-const ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 const functions = require('firebase-functions');
+const app = require('actions-on-google').actionssdk();
 
-const mainIntent = app => {
-  app.ask('Hi! Can you say something? You can finish this conversation to say bye.');
+const mainIntent = conv => {
+  conv.ask('Hi! Can you say something? You can finish this conversation to say bye.');
 };
-const rawInput = app => {
-  const rawInput = app.getRawInput();
+const subIntent = (conv, rawInput) => {
   if (rawInput === 'bye') {
-    app.tell('Goodbye!');
+    conv.close('Goodbye!');
   } else {
-    app.ask(`You said, ${rawInput}. Can you say something?`);
+    conv.ask(`You said, ${rawInput}. Can you say something?`);
   }
 };
 
-exports.echo = functions.https.onRequest((request, response) => {
-  const app = new ActionsSdkApp({ request, response });
-  const actionMap = new Map();
-  actionMap.set('actions.intent.MAIN', mainIntent);
-  actionMap.set('actions.intent.TEXT', rawInput);
-  app.handleRequest(actionMap);
-});
+app.intent('actions.intent.MAIN', mainIntent);
+app.intent('actions.intent.TEXT', subIntent);
+
+exports.echo = functions.https.onRequest(app);
 ```
 
 ## echo関数をデプロイ
