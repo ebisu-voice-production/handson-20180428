@@ -11,7 +11,8 @@
 
 ## コーディング
 [actions-on-google](https://github.com/actions-on-google/actions-on-google-nodejs)と[firebase-functions](https://github.com/firebase/firebase-functions)が必要となるので2つをインポート。  
-ActionsSdkAppのリファレンスは[コチラ](https://developers.google.com/actions/reference/nodejs/ActionsSdkApp)
+ActionsSdkAppのリファレンスは[コチラ](https://actions-on-google.github.io/actions-on-google-nodejs/index.html)
+※本ハンズオンでは、v1ではなく、v2を扱います
 ```
 const functions = require('firebase-functions');
 const app = require('actions-on-google').actionssdk();
