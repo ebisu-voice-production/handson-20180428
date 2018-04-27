@@ -25,10 +25,10 @@ Echoアプリで学んだことでは、ユーザーが発話した内容を単�
 - 3-b. 「いいえ」- 「まだ削除しないでおきますね、ではまた。」
 
 ## 必要な機能
-[公式リファレンス](https://actions-on-google.github.io/actions-on-google-nodejs/classes/_service_actionssdk_conv_.actionssdkconversation.html)  
-- [dataプロパティ](https://actions-on-google.github.io/actions-on-google-nodejs/classes/_service_actionssdk_conv_.actionssdkconversation.html#data): アプリ起動〜終了の間(セッション)で保持したいデータをJSON形式で持っています。実際はobjectとして扱えます
-- [userプロパティ](https://actions-on-google.github.io/actions-on-google-nodejs/classes/actionssdk.user.html): ユーザー単位でGoogle側が保持するデータです
-  - [storageプロパティ](https://actions-on-google.github.io/actions-on-google-nodejs/classes/actionssdk.user.html#storage): セッションを超えて保持したいデータをJSON形式で扱えます。実際はobjectとして扱えます。
+[公式リファレンス](https://actions-on-google.github.io/actions-on-google-nodejs/classes/actionssdk.actionssdkconversation.html)  
+- [dataプロパティ](https://actions-on-google.github.io/actions-on-google-nodejs/classes/actionssdk.actionssdkconversation.html#data): アプリ起動〜終了の間(セッション)で保持したいデータをJSON形式で持っています。実際はobjectとして扱えます
+- [userプロパティ](https://actions-on-google.github.io/actions-on-google-nodejs/classes/conversation.user.html): ユーザー単位でGoogle側が保持するデータです
+  - [storageプロパティ](https://actions-on-google.github.io/actions-on-google-nodejs/classes/conversation.user.html#storage): セッションを超えて保持したいデータをJSON形式で扱えます。実際はobjectとして扱えます。
 
 ## 参考例
 上記の実装例としてサンプルを用意したのでヒントとしてください。  
